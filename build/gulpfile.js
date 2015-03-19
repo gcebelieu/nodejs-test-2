@@ -41,7 +41,7 @@ gulp.task('download', ["clean"], function() {
 });
 
 // normalisation des noms de dependances issu de "bower"
-gulp.task('normalize', ["clean"], function() {
+gulp.task('normalize', ["download"], function() {
     
     // les dependances doivent être placées dans le répertoire : target/build/js/external/
     // avec la possibilité d'utilisé une version minifiée ou non (cf. --dev)
