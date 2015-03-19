@@ -4,14 +4,21 @@ var gutil     = require('gulp-util');
 var normalize = require('gulp-bower-normalize');
 var bower     = require('main-bower-files');
 var debug     = require('gulp-debug');
+var runtask   = require('gulp-bower');
 
 // system file...
 var fs = require('fs');
 
 var targetdir = "./target";
 
+var bDownload = false;
+if(gutil.env.download === true) {
+    bDownload = true;
+}
+
 gulp.task('default', [
     "clean",
+    "download",
     "normalize",
     "build"
 ]);
@@ -21,6 +28,16 @@ gulp.task("clean", function () {
     return gulp.src(targetdir, {read: false})
         .pipe(debug({title: ':clean'}))
         .pipe(clean());
+});
+
+// recuperation des dependances via "bower" 
+gulp.task('download', ["clean"], function() {
+    
+     if (bDownload) {
+        return runtask();
+    }
+    
+    gutil.log("SKIP Task : download !");
 });
 
 // normalisation des noms de dependances issu de "bower"

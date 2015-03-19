@@ -170,23 +170,6 @@
                     </execution>
                     <execution>
                         <phase>process-sources</phase>
-                        <id>bower-building</id>
-                        <configuration>
-                            <target name="bower-building">
-                                <echo>"BOWER INSTALL"</echo>
-                                <exec executable="node_modules/.bin/bower" 
-                                      dir="${project.basedir}/build/"
-                                      osfamily="unix" failonerror="false"> <!-- on autorise les erreurs de téléchargements ! -->
-                                    <arg line="install --config.https-proxy=${proxy.https}"/> <!--config.https-proxy=http://host:port -->
-                                </exec>
-                            </target>
-                        </configuration>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <phase>process-sources</phase>
                         <id>gulp-building</id>
                         <configuration>
                             <target name="gulp-building">
@@ -194,7 +177,7 @@
                                 <exec executable="node_modules/.bin/gulp" 
                                       dir="${project.basedir}/build/"
                                       osfamily="unix" failonerror="false"><!-- on autorise les erreurs sur la jsdoc ! -->
-                                    <arg line=""/>
+                                    <arg line="--download"/>
                                 </exec>
                             </target>
                         </configuration>
