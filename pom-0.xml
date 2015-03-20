@@ -1,0 +1,205 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>nodejs</groupId>
+    <artifactId>nodejs.test</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0.0-SNAPSHOT</version>
+
+    <name>nodejs</name>
+    <url>https://geoportail.forge.ign.fr/hg/nodejs-test</url>
+
+    <parent>
+        <groupId>org.kazansource</groupId>
+        <artifactId>kazan-parent</artifactId>
+        <version>3</version>
+    </parent>
+       
+    <!-- properties -->
+    <properties></properties>
+  
+    <!-- 
+        profil actif par defaut : ign 
+        afin de mettre en place le proxy HTTPS
+    -->
+    <profiles>
+        <profile>
+          <id>local</id>
+          <activation>
+            <activeByDefault>false</activeByDefault>
+          </activation>
+          <properties>
+              <proxy.https>http://obernai.ign.fr:3128</proxy.https>
+          </properties>
+        </profile>
+        <profile>
+          <id>prod</id>
+          <activation>
+            <activeByDefault>true</activeByDefault>
+          </activation>
+          <properties>
+              <proxy.https>http://relay-gpp3-interco.sca.gpp.priv.atos.fr:3128</proxy.https>
+          </properties>
+        </profile>
+    </profiles>
+    
+    
+    <build>
+    
+        <plugins>
+        
+            <!-- 
+                Installation nodejs + npm
+                Installation des modules nodejs (cf. package.json)  
+                Installation des dependancs JS  (cf. bower.json)
+                Execution du build JS           (cf. gulpfile.json ) 
+            -->
+            <plugin>
+                <groupId>com.github.eirslett</groupId>
+                <artifactId>frontend-maven-plugin</artifactId>
+                <version>0.0.22</version>
+
+                <executions>
+                    
+                    <execution>
+                        <id>install node and npm</id>
+                        <goals>
+                            <goal>install-node-and-npm</goal>
+                        </goals>
+                        <configuration>
+                            <workingDirectory>${project.basedir}/build/</workingDirectory>
+                            <nodeVersion>v0.10.26</nodeVersion>
+                            <npmVersion>1.4.3</npmVersion>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>npm install</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <!-- Optional configuration : verbose -->
+                        <configuration>
+                            <workingDirectory>${project.basedir}/build/</workingDirectory>
+                            <arguments>install ${options} --https-proxy=${proxy.https}</arguments>
+                        </configuration>
+                    </execution>
+                    
+                    <execution>
+                        <id>bower install</id>
+                        <goals>
+                            <goal>bower</goal>
+                        </goals>
+                        <configuration>
+                            <workingDirectory>${project.basedir}/build/</workingDirectory>
+                            <arguments>install ${options} --config.https-proxy=${proxy.https}</arguments>
+                        </configuration>
+                    </execution>                    
+
+                    <execution>
+                        <id>gulp build</id>
+                        <goals>
+                            <goal>gulp</goal>
+                        </goals>
+                        <configuration>
+                            <workingDirectory>${project.basedir}/build/</workingDirectory>
+                        </configuration>
+                    </execution>
+                    
+                </executions>
+            </plugin>
+        </plugins>
+    
+    </build>
+    
+    <!-- 
+      LifeCycle 'default' :
+        <phases>
+            <phase>validate</phase>
+            <phase>initialize</phase>         
+            <phase>generate-sources</phase>   
+            <phase>process-sources</phase>    
+            <phase>generate-resources</phase> 
+            <phase>process-resources</phase>  
+            <phase>compile</phase>            
+            <phase>process-classes</phase>
+            <phase>generate-test-sources</phase>
+            <phase>process-test-sources</phase>
+            <phase>generate-test-resources</phase>
+            <phase>process-test-resources</phase>
+            <phase>test-compile</phase>
+            <phase>process-test-classes</phase>
+            <phase>test</phase>
+            <phase>prepare-package</phase>
+            <phase>package</phase>            
+            <phase>pre-integration-test</phase>
+            <phase>integration-test</phase>
+            <phase>post-integration-test</phase>
+            <phase>verify</phase>
+            <phase>install</phase>
+            <phase>deploy</phase>
+        </phases>
+    -->
+    
+    <!-- Depots -->
+    <repositories>
+        <repository>
+            <id>kazan-repo</id>
+            <url>https://geoportail.forge.ign.fr/nexus/content/groups/kazan</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </repository>
+    </repositories>
+    
+    <!-- Depots deploiement -->
+    <distributionManagement>
+        <repository>
+            <id>kazan-repo</id>
+            <name>Deploy repository</name>
+            <url>https://geoportail.forge.ign.fr/nexus/content/groups/kazan</url>
+            <uniqueVersion>false</uniqueVersion>
+        </repository>
+        <snapshotRepository>
+            <id>kazan-snapshot-repo</id>
+            <name>Snapshot deploy repository</name>
+            <url>https://geoportail.forge.ign.fr/nexus/content/repositories/kazan-snapshot</url>
+            <uniqueVersion>false</uniqueVersion>
+        </snapshotRepository>
+        <site>
+            <id>site</id>
+            <url>https://geoportail.forge.ign.fr/nexus/</url>
+        </site>
+    </distributionManagement>
+    
+    <!-- Depots Plugin -->
+    <pluginRepositories>
+        <pluginRepository>
+            <id>kazan-public</id>
+            <name>Kazan public repository</name>
+            <url>https://geoportail.forge.ign.fr/nexus/content/groups/public/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </pluginRepository>
+        <pluginRepository>
+            <id>kazan-repo</id>
+            <name>Kazan public repository</name>
+            <url>https://geoportail.forge.ign.fr/nexus/content/groups/kazan/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+ 
+</project>

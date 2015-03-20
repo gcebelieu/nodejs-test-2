@@ -1,0 +1,39 @@
+#########
+command
+#########
+
+mvn clean install -Doptions="--verbose" -Plocal
+
+#######################################
+FIXME : gestion du proxy http/https ?
+#######################################
+
+1/ (cf. pom-0.xml)
+    Avec le plugin Maven "com.github.eirslett/frontend-maven-plugin", 
+    la seule possibilité de configurer le proxy pour l'installation ou l'execution de
+    nodeJs + npm + bower est par Maven :
+    ~/.m2/settings.xml => OK
+        <proxy>
+            <active>true</active>
+            <protocol>http</protocol>
+            <host></host>
+            <port></port>
+        </proxy>
+
+    Il est possible de surcharger des proxy mais on aura toujours le proxy par defaut de Maven dans la commande :
+    npm install   --https-proxy=http://obernai.ign.fr:3128
+    bower install --config.https-proxy=http://obernai.ign.fr:3128
+
+2/ (cf. pom-1.xml) 
+3/ (cf. pom-2.xml) 
+
+####################
+FIXME : erreur SSL ?
+####################
+
+Pour eviter ce type d'erreur :
+
+    [ERROR] npm info retry will retry, error on last attempt: Error: tunneling socket could not be established, cause=140492896233344:error:140770FC:SSL routines:SSL23_GET_SERVER_HELLO:unknown protocol:../deps/openssl/openssl/ssl/s23_clnt.c:766:
+    [ERROR] npm info retry 
+
+Il ne faut pas oublier de mettre en place 'https-proxy' !
