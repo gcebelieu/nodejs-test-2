@@ -2,7 +2,7 @@
 command
 #########
 
-mvn clean install -Doptions="--verbose" -Plocal
+mvn clean install -Doptions="--verbose"
 
 #######################################
 FIXME : gestion du proxy http/https ?
@@ -25,7 +25,10 @@ FIXME : gestion du proxy http/https ?
     bower install --config.https-proxy=http://obernai.ign.fr:3128
 
 2/ (cf. pom-1.xml) 
+    Avec le plugin Maven "maven-antrun-plugin"
+
 3/ (cf. pom-2.xml) 
+    Avec le plugin Maven "exec-maven-plugin"
 
 ####################
 FIXME : erreur SSL ?
@@ -37,3 +40,6 @@ Pour eviter ce type d'erreur :
     [ERROR] npm info retry 
 
 Il ne faut pas oublier de mettre en place 'https-proxy' !
+
+Mais le probleme, c'est BOWER QUI N'ACCEPTE PAS L'OPTION EN LIGNE DE COMMANDE, NI LE FICHIER .BOWERRC ...
+IL LUI FAUT DU ENV "https_proxy"

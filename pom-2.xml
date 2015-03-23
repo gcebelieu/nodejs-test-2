@@ -118,8 +118,6 @@
                             <arguments>
                                 <argument>${project.basedir}/build/node_modules/.bin/bower</argument>
                                 <argument>install</argument>
-                                <argument>${options}</argument>
-                                <argument>--config.https-proxy=${proxy.https}</argument>
                             </arguments>
                             <workingDirectory>${project.basedir}/build/</workingDirectory>
                         </configuration>

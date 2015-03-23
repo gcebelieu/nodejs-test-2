@@ -20,33 +20,6 @@
     <properties></properties>
     
     <!-- 
-        profil actif par defaut : prod 
-        afin de mettre en place le proxy HTTPS
-    -->
-    <profiles>
-        <profile>
-          <id>local</id>
-          <activation>
-            <activeByDefault>false</activeByDefault>
-          </activation>
-          <properties>
-              <proxy.http>http://obernai.ign.fr:3128</proxy.http>
-              <proxy.https>http://obernai.ign.fr:3128</proxy.https>
-          </properties>
-        </profile>
-        <profile>
-          <id>prod</id>
-          <activation>
-            <activeByDefault>true</activeByDefault>
-          </activation>
-          <properties>
-              <proxy.http>http://relay-gpp3-interco.sca.gpp.priv.atos.fr:3128</proxy.http>
-              <proxy.https>http://relay-gpp3-interco.sca.gpp.priv.atos.fr:3128</proxy.https>
-          </properties>
-        </profile>
-    </profiles>
-
-    <!-- 
       LifeCycle 'default' :
         <phases>
             <phase>validate</phase>
@@ -96,7 +69,7 @@
                                 <echo>"NPM INSTALL"</echo>
                                 <exec executable="npm" dir="${project.basedir}/build/"
                                       osfamily="unix" failonerror="false"> 
-                                    <arg line="install ${options} --https-proxy=${proxy.https}"/> 
+                                    <arg line="install ${options}"/> 
                                 </exec>
                             </target>
                         </configuration>
@@ -113,7 +86,7 @@
                                 <exec executable="node_modules/.bin/bower" 
                                       dir="${project.basedir}/build/"
                                       osfamily="unix" failonerror="false">
-                                    <arg line="install ${options} --config.https-proxy=${proxy.https}"/>
+                                    <arg line="install"/>
                                 </exec>
                             </target>
                         </configuration>
