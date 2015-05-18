@@ -45,35 +45,6 @@
           </properties>
         </profile>
     </profiles>
-
-    <!-- 
-      LifeCycle 'default' :
-        <phases>
-            <phase>validate</phase>
-            <phase>initialize</phase>         
-            <phase>generate-sources</phase>   
-            <phase>process-sources</phase>    
-            <phase>generate-resources</phase> 
-            <phase>process-resources</phase>  
-            <phase>compile</phase>            
-            <phase>process-classes</phase>
-            <phase>generate-test-sources</phase>
-            <phase>process-test-sources</phase>
-            <phase>generate-test-resources</phase>
-            <phase>process-test-resources</phase>
-            <phase>test-compile</phase>
-            <phase>process-test-classes</phase>
-            <phase>test</phase>
-            <phase>prepare-package</phase>
-            <phase>package</phase>            
-            <phase>pre-integration-test</phase>
-            <phase>integration-test</phase>
-            <phase>post-integration-test</phase>
-            <phase>verify</phase>
-            <phase>install</phase>
-            <phase>deploy</phase>
-        </phases>
-    -->
   
     <build>
     
@@ -99,9 +70,15 @@
                         <configuration>
                             <executable>npm</executable>
                             <arguments>
+                                <!-- INFO 
+                                la configuration du proxy fonctionne avec :
+                                    la surcharge de commande
+                                        'https-proxy'
+                                    la variable d'environnement systeme
+                                        'https_proxy'
+                                    le fichier $HOME/.npmrc 
+                            -->
                                 <argument>install</argument>
-                                <argument>${options}</argument>
-                                <argument>--https-proxy=${proxy.https}</argument>
                             </arguments>
                             <workingDirectory>${project.basedir}/build/</workingDirectory>
                         </configuration>
@@ -116,6 +93,12 @@
                         <configuration>
                             <executable>node</executable>
                             <arguments>
+                                <!-- FIXME 
+                                    la configuration du proxy ne fonctionne pas :
+                                        'config.https-proxy'
+                                    il faut mettre en place la variable d'environnement systeme :
+                                        'https_proxy'
+                                -->
                                 <argument>${project.basedir}/build/node_modules/.bin/bower</argument>
                                 <argument>install</argument>
                             </arguments>
@@ -133,6 +116,7 @@
                             <executable>node</executable>
                             <arguments>
                                 <argument>${project.basedir}/build/node_modules/.bin/gulp</argument>
+                                <argument>--withbower</argument>
                             </arguments>
                             <workingDirectory>${project.basedir}/build/</workingDirectory>
                         </configuration>

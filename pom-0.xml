@@ -17,33 +17,7 @@
     </parent>
        
     <!-- properties -->
-    <properties></properties>
-  
-    <!-- 
-        profil actif par defaut : ign 
-        afin de mettre en place le proxy HTTPS
-    -->
-    <profiles>
-        <profile>
-          <id>local</id>
-          <activation>
-            <activeByDefault>false</activeByDefault>
-          </activation>
-          <properties>
-              <proxy.https>http://obernai.ign.fr:3128</proxy.https>
-          </properties>
-        </profile>
-        <profile>
-          <id>prod</id>
-          <activation>
-            <activeByDefault>true</activeByDefault>
-          </activation>
-          <properties>
-              <proxy.https>http://relay-gpp3-interco.sca.gpp.priv.atos.fr:3128</proxy.https>
-          </properties>
-        </profile>
-    </profiles>
-    
+    <properties></properties>  
     
     <build>
     
@@ -79,10 +53,17 @@
                         <goals>
                             <goal>npm</goal>
                         </goals>
-                        <!-- Optional configuration : verbose -->
+                        <!-- INFO 
+                            la configuration du proxy fonctionne avec :
+                                la surcharge de commande
+                                    'https-proxy'
+                                la variable d'environnement systeme
+                                    'https_proxy'
+                                le fichier $HOME/.npmrc 
+                        -->
                         <configuration>
                             <workingDirectory>${project.basedir}/build/</workingDirectory>
-                            <arguments>install ${options} --https-proxy=${proxy.https}</arguments>
+                            <arguments>install</arguments>
                         </configuration>
                     </execution>
                     
@@ -91,6 +72,12 @@
                         <goals>
                             <goal>bower</goal>
                         </goals>
+                        <!-- FIXME 
+                            la configuration du proxy ne fonctionne pas :
+                                'config.https-proxy'
+                            il faut mettre en place la variable d'environnement systeme :
+                                'https_proxy'
+                        -->
                         <configuration>
                             <workingDirectory>${project.basedir}/build/</workingDirectory>
                             <arguments>install</arguments>
@@ -104,6 +91,7 @@
                         </goals>
                         <configuration>
                             <workingDirectory>${project.basedir}/build/</workingDirectory>
+                            <arguments>--withbower</arguments>
                         </configuration>
                     </execution>
                     

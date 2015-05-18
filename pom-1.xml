@@ -19,35 +19,6 @@
     <!-- properties -->
     <properties></properties>
     
-    <!-- 
-      LifeCycle 'default' :
-        <phases>
-            <phase>validate</phase>
-            <phase>initialize</phase>         
-            <phase>generate-sources</phase>   
-            <phase>process-sources</phase>    
-            <phase>generate-resources</phase> 
-            <phase>process-resources</phase>  
-            <phase>compile</phase>            
-            <phase>process-classes</phase>
-            <phase>generate-test-sources</phase>
-            <phase>process-test-sources</phase>
-            <phase>generate-test-resources</phase>
-            <phase>process-test-resources</phase>
-            <phase>test-compile</phase>
-            <phase>process-test-classes</phase>
-            <phase>test</phase>
-            <phase>prepare-package</phase>
-            <phase>package</phase>            
-            <phase>pre-integration-test</phase>
-            <phase>integration-test</phase>
-            <phase>post-integration-test</phase>
-            <phase>verify</phase>
-            <phase>install</phase>
-            <phase>deploy</phase>
-        </phases>
-    -->
-  
     <build>
     
         <plugins>
@@ -65,11 +36,19 @@
                         <phase>generate-sources</phase>
                         <id>npm-building</id>
                         <configuration>
+                            <!-- INFO 
+                                la configuration du proxy fonctionne avec :
+                                    la surcharge de commande
+                                        'https-proxy'
+                                    la variable d'environnement systeme
+                                        'https_proxy'
+                                    le fichier $HOME/.npmrc 
+                            -->
                             <target name="npm-building">
                                 <echo>"NPM INSTALL"</echo>
                                 <exec executable="npm" dir="${project.basedir}/build/"
                                       osfamily="unix" failonerror="false"> 
-                                    <arg line="install ${options}"/> 
+                                    <arg line="install"/> 
                                 </exec>
                             </target>
                         </configuration>
@@ -81,6 +60,12 @@
                         <phase>generate-sources</phase>
                         <id>bower-building</id>
                         <configuration>
+                            <!-- FIXME 
+                                la configuration du proxy ne fonctionne pas :
+                                    'config.https-proxy'
+                                il faut mettre en place la variable d'environnement systeme :
+                                    'https_proxy'
+                            -->
                             <target name="bower-building">
                                 <echo>"BOWER INSTALL"</echo>
                                 <exec executable="node_modules/.bin/bower" 
@@ -103,7 +88,7 @@
                                 <exec executable="node_modules/.bin/gulp" 
                                       dir="${project.basedir}/build/"
                                       osfamily="unix" failonerror="false">
-                                    <arg line=""/>
+                                    <arg line="--withbower"/>
                                 </exec>
                             </target>
                         </configuration>

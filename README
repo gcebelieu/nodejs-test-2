@@ -8,11 +8,11 @@ mvn clean install -Doptions="--verbose"
 FIXME : gestion du proxy http/https ?
 #######################################
 
-1/ (cf. pom-0.xml)
+1/ (cf. pom-0.xml) 
     Avec le plugin Maven "com.github.eirslett/frontend-maven-plugin", 
     la seule possibilité de configurer le proxy pour l'installation ou l'execution de
     nodeJs + npm + bower est par Maven :
-    ~/.m2/settings.xml => OK
+    ~/.m2/settings.xml
         <proxy>
             <active>true</active>
             <protocol>http</protocol>
@@ -20,15 +20,35 @@ FIXME : gestion du proxy http/https ?
             <port></port>
         </proxy>
 
-    Il est possible de surcharger des proxy mais on aura toujours le proxy par defaut de Maven dans la commande :
+    Mais ceci ne semble pas fonctionner car impossible de passer par un proxy https 
+    Le config. est la suivante mais il n'existe pas de proxy https
+   ~/.m2/settings.xml
+        <proxy>
+            <active>true</active>
+            <protocol>https</protocol>
+            <host></host>
+            <port></port>
+        </proxy>
+    
+    Donc, il est possible de surcharger le proxy en ajoutant les options suivante 
+    mais on aura toujours le proxy par defaut de Maven dans la commande :
     npm install   --https-proxy=http://obernai.ign.fr:3128
     bower install --config.https-proxy=http://obernai.ign.fr:3128
+
+    Mais Exception avec bower
+    Failed to connect to github.com port 443: Connection timed out
 
 2/ (cf. pom-1.xml) 
     Avec le plugin Maven "maven-antrun-plugin"
 
+    Mais Exception avec bower
+    Failed to connect to github.com port 443: Connection timed out
+
 3/ (cf. pom-2.xml) 
     Avec le plugin Maven "exec-maven-plugin"
+
+    Mais Exception avec bower
+    Failed to connect to github.com port 443: Connection timed out
 
 ####################
 FIXME : erreur SSL ?
@@ -39,7 +59,16 @@ Pour eviter ce type d'erreur :
     [ERROR] npm info retry will retry, error on last attempt: Error: tunneling socket could not be established, cause=140492896233344:error:140770FC:SSL routines:SSL23_GET_SERVER_HELLO:unknown protocol:../deps/openssl/openssl/ssl/s23_clnt.c:766:
     [ERROR] npm info retry 
 
-Il ne faut pas oublier de mettre en place 'https-proxy' !
 
-Mais le probleme, c'est BOWER QUI N'ACCEPTE PAS L'OPTION EN LIGNE DE COMMANDE, NI LE FICHIER .BOWERRC ...
-IL LUI FAUT DU ENV "https_proxy"
+####################
+FIXME : erreur proxy ?
+####################
+
+[ERROR] bower : Failed to connect to github.com port 443: Connection timed out
+
+Il ne faut pas oublier de mettre en place la variable d'environnement systeme 
+    'https_proxy'
+    > BOWER N'ACCEPTE PAS L'OPTION EN LIGNE DE COMMANDE, NI LE FICHIER .BOWERRC ...
+
+Sous Netbeans, ajouter dans la boite de build, la ligne suivante :
+    Env.https_proxy=http://obernai.ign.fr:3128
